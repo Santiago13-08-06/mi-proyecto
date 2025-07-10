@@ -1,0 +1,79 @@
+<div class="register-wrapper">
+  <div class="register-form">
+    <h2>Registro de usuario</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <!-- Nombre completo -->
+      <div>
+        <label>Nombre completo:</label>
+        <input type="text" formControlName="nombreCompleto" />
+        <div class="error" *ngIf="nombreCompleto?.invalid && (nombreCompleto?.touched || nombreCompleto?.dirty)">
+          <small *ngIf="nombreCompleto?.errors?.['required']">El nombre es obligatorio.</small>
+          <small *ngIf="nombreCompleto?.errors?.['minlength']">Debe tener al menos 3 caracteres.</small>
+        </div>
+        <div class="error" *ngIf="serverErrors['nombreCompleto']">
+          <small *ngFor="let err of serverErrors['nombreCompleto']">{{ err }}</small>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label>Email:</label>
+        <input type="email" formControlName="email" />
+        <div class="error" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+          <small *ngIf="email?.errors?.['required']">El correo es obligatorio.</small>
+          <small *ngIf="email?.errors?.['email']">El correo no es válido.</small>
+        </div>
+        <div class="error" *ngIf="serverErrors['email']">
+          <small *ngFor="let err of serverErrors['email']">{{ err }}</small>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <label>Contraseña:</label>
+        <input type="password" formControlName="password" />
+        <div class="error" *ngIf="password?.invalid && (password?.touched || password?.dirty)">
+          <small *ngIf="password?.errors?.['required']">La contraseña es obligatoria.</small>
+          <small *ngIf="password?.errors?.['minlength']">Debe tener al menos 6 caracteres.</small>
+        </div>
+        <div class="error" *ngIf="serverErrors['password']">
+          <small *ngFor="let err of serverErrors['password']">{{ err }}</small>
+        </div>
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div>
+        <label>Confirmar contraseña:</label>
+        <input type="password" formControlName="passwordConfirmation" />
+        <div class="error" *ngIf="passwordConfirmation?.invalid && (passwordConfirmation?.touched || passwordConfirmation?.dirty)">
+          <small *ngIf="passwordConfirmation?.errors?.['required']">Debes confirmar la contraseña.</small>
+        </div>
+        <div class="error" *ngIf="registerForm.hasError('mismatch') && (passwordConfirmation?.touched || passwordConfirmation?.dirty)">
+          <small>Las contraseñas no coinciden</small>
+        </div>
+        <div class="error" *ngIf="serverErrors['password_confirmation']">
+          <small *ngFor="let err of serverErrors['password_confirmation']">{{ err }}</small>
+        </div>
+      </div>
+
+      <!-- Mensaje de error general -->
+      <div class="alert alert-danger" *ngIf="errorMsg">
+        {{ errorMsg }}
+      </div>
+
+      <!-- Mensaje de éxito -->
+      <div class="success" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+
+      <!-- Botón de enviar -->
+      <button type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+
+      <!-- Botón para ir a login -->
+      <button type="button" (click)="goToLogin()">¿Ya tienes cuenta? Inicia sesión</button>
+
+    </form>
+  </div>
+</div>
