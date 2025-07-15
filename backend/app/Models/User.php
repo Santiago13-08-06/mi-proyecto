@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    // 🔥 Indicar que esta clase usa la tabla 'usuarios'
+    // Indica que esta clase usa la tabla 'usuarios'
     protected $table = 'usuarios';
 
     /**
@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'nombreCompleto', // 👈 este es el nombre correcto
+        'nombreCompleto',
         'email',
         'password',
     ];

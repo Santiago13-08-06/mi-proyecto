@@ -8,10 +8,8 @@ interface MeResponse {
     id: number;
     name: string;
     email: string;
-    // ... cualquier otro campo que devuelva Laravel
   };
 }
-
 
 interface LoginResponse {
   token: string;
@@ -23,62 +21,81 @@ interface LoginResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8000/api';
-  private user: any = null;
+  private user: MeResponse['user'] | null = null;
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Iniciar sesión
+  /**
+   * Inicia sesión con email y contraseña.
+   * @param email Email del usuario
+   * @param password Contraseña
+   */
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, {
-      email,
-      password
-    }, { withCredentials: true });
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}/login`,
+      { email, password },
+      { withCredentials: true }
+    );
   }
 
-  // ✅ Obtener usuario autenticado
+  /**
+   * Obtiene el usuario autenticado (usando token).
+   * Guarda el usuario en la propiedad local para reutilizar.
+   */
   getUser(): Observable<MeResponse | null> {
-  const token = localStorage.getItem('token');
-  const headers = { Authorization: `Bearer ${token}` };
+    const token = localStorage.getItem('token');
+    if (!token) return of(null);
 
-  return this.http.get<MeResponse>(`${this.apiUrl}/me`, { headers }).pipe(
-    tap(response => this.user = response.user),
-    catchError(() => of(null))
-  );
-}
+    const headers = { Authorization: `Bearer ${token}` };
 
+    return this.http.get<MeResponse>(`${this.apiUrl}/me`, { headers }).pipe(
+      tap((response) => (this.user = response.user)),
+      catchError(() => of(null))
+    );
+  }
 
-
-
+  /**
+   * Getter para acceder al usuario autenticado en memoria.
+   */
   get usuarioActual() {
     return this.user;
   }
 
-  // ✅ Registrar nuevo usuario
+  /**
+   * Registra un nuevo usuario.
+   * @param nombre Nombre completo
+   * @param email Email
+   * @param password Contraseña
+   * @param passwordConfirmation Confirmación de contraseña
+   */
   register(
-  nombre: string,
-  email: string,
-  password: string,
-  passwordConfirmation: string
-): Observable<any> {
-  const data = {
-    nombreCompleto: nombre,
-    email,
-    password,
-    password_confirmation: passwordConfirmation
-  };
+    nombre: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string
+  ): Observable<any> {
+    const data = {
+      nombreCompleto: nombre,
+      email,
+      password,
+      password_confirmation: passwordConfirmation,
+    };
 
-  return this.http.post(`${this.apiUrl}/register`, data, {
-    withCredentials: true
-  });
-}
+    return this.http.post(`${this.apiUrl}/register`, data, {
+      withCredentials: true,
+    });
+  }
 
-logout(): void {
-  localStorage.removeItem('token'); // o lo que estés usando
-  // También puedes limpiar usuario, etc.
-}
-
+  /**
+   * Cierra sesión del usuario.
+   * Limpia token y datos locales.
+   */
+  logout(): void {
+    localStorage.removeItem('token');
+    this.user = null;
+  }
 }

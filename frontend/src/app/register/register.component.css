@@ -1,4 +1,7 @@
-/* Fondo centrado como en login */
+/* ================================ */
+/* Registro: Fondo centrado general */
+/* ================================ */
+
 .register-wrapper {
   position: fixed;
   top: 0;
@@ -12,7 +15,10 @@
   overflow: hidden;
 }
 
-/* Contenedor del formulario */
+/* ============================ */
+/* Formulario principal registro */
+/* ============================ */
+
 .register-form {
   position: relative;
   z-index: 2;
@@ -27,7 +33,10 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Ajuste responsive del padding */
+/* ==================== */
+/* Responsive breakpoints */
+/* ==================== */
+
 @media (max-width: 480px) {
   .register-form {
     padding: 20px;
@@ -35,28 +44,32 @@
   }
 }
 
-/* Formulario interno */
+/* ===================== */
+/* Estructura del formulario */
+/* ===================== */
+
 form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Contenedor de cada campo */
 form > div {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-/* Etiquetas */
+/* ===================== */
+/* Etiquetas e Inputs */
+/* ===================== */
+
 label {
   font-weight: bold;
   font-size: 14px;
   color: #1a1a1a;
 }
 
-/* Inputs */
 input {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
@@ -73,8 +86,11 @@ input:focus {
   outline: none;
 }
 
-/* Botón principal */
-button[type="submit"] {
+/* =================== */
+/* Botones principales */
+/* =================== */
+
+button[type='submit'] {
   padding: 12px;
   font-size: 16px;
   background-color: #007bff;
@@ -86,19 +102,19 @@ button[type="submit"] {
   transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-button[type="submit"]:hover:not(:disabled) {
+button[type='submit']:hover:not(:disabled) {
   background-color: #0056b3;
   transform: scale(1.01);
 }
 
-/* Botón deshabilitado */
 button:disabled {
   background-color: #999;
   cursor: not-allowed;
 }
 
-/* Botón extra (ir a login) */
-button[type="button"] {
+/* Botón adicional para ir a login */
+
+button[type='button'] {
   padding: 10px;
   font-size: 14px;
   background: transparent;
@@ -110,11 +126,14 @@ button[type="button"] {
   width: 100%;
 }
 
-button[type="button"]:hover {
+button[type='button']:hover {
   color: #0056b3;
 }
 
-/* Mensajes de error backend o frontend */
+/* ==================== */
+/* Mensajes de estado */
+/* ==================== */
+
 .error {
   font-size: 14px;
   color: #dc3545;
@@ -127,7 +146,6 @@ button[type="button"]:hover {
   text-align: center;
 }
 
-/* Estilo de alertas como en login */
 .alert.alert-danger {
   font-size: 14px;
   color: #dc3545;
@@ -138,15 +156,21 @@ button[type="button"]:hover {
   margin-top: -10px;
 }
 
-/* Animaciones iguales al login */
+/* ==================== */
+/* Animaciones decorativas */
+/* ==================== */
+
 @keyframes bordeAnimado {
-  0%, 50%, 100% {
+  0%,
+  50%,
+  100% {
     border-image-slice: 1;
   }
 }
 
 @keyframes brilloAnimado {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
   }
   50% {

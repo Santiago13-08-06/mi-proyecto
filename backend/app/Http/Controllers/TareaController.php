@@ -12,15 +12,15 @@ class TareaController extends Controller
 {
     // Listar todas las tareas del usuario autenticado
     public function index(Request $request)
-{
-    $user = $request->user();
+    {
+        $user = $request->user();
 
-    $tareas = Tarea::with('categoria')
-        ->where('idUsuario', $user->id)
-        ->get();
+        $tareas = Tarea::with('categoria')
+            ->where('idUsuario', $user->id)
+            ->get();
 
-    return response()->json($tareas);
-}
+        return response()->json($tareas);
+    }
 
 
     // Crear una nueva tarea
@@ -57,81 +57,81 @@ class TareaController extends Controller
 
     // Mostrar detalle de una tarea específica
     public function show(Request $request, $id)
-{
-    // Verifica que el ID sea numérico
-    if (!is_numeric($id)) {
-        return response()->json(['message' => 'ID inválido'], 400);
-    }
+    {
+        // Verifica que el ID sea numérico
+        if (!is_numeric($id)) {
+            return response()->json(['message' => 'ID inválido'], 400);
+        }
 
-    // Intentamos obtener la tarea, o capturamos el error si no existe
-    try {
-        $tarea = Tarea::with('categoria')->findOrFail($id);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Tarea no encontrada'], 404);
-    }
+        // Intentamos obtener la tarea, o capturamos el error si no existe
+        try {
+            $tarea = Tarea::with('categoria')->findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Tarea no encontrada'], 404);
+        }
 
-    // Verificamos que el usuario autenticado sea el dueño
-    if ($request->user()->id !== $tarea->idUsuario) {
-        return response()->json(['message' => 'No autorizado'], 403);
-    }
+        // Verificamos que el usuario autenticado sea el dueño
+        if ($request->user()->id !== $tarea->idUsuario) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
 
-    return response()->json($tarea);
-}
+        return response()->json($tarea);
+    }
 
     // Actualizar una tarea
     public function update(Request $request, $id)
-{
-    $tarea = Tarea::find($id);
-    if (!$tarea) {
-        return response()->json(['message' => 'Tarea no encontrada'], 404);
-    }
+    {
+        $tarea = Tarea::find($id);
+        if (!$tarea) {
+            return response()->json(['message' => 'Tarea no encontrada'], 404);
+        }
 
-    if ($request->user()->id !== $tarea->idUsuario) {
-        return response()->json(['message' => 'No autorizado'], 403);
-    }
+        if ($request->user()->id !== $tarea->idUsuario) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
 
-    $request->validate([
-        'titulo'      => 'sometimes|required|string|max:100',
-        'descripcion' => 'nullable|string',
-        'estado'      => 'sometimes|required|string',
-        'prioridad'   => 'sometimes|required|string',
-        'fechaLimite' => 'nullable|date',
-        'idCategoria' => 'nullable|exists:categorias,idCategoria',
-    ]);
-
-    $original = $tarea->getOriginal();
-
-    $tarea->update($request->only([
-        'titulo',
-        'descripcion',
-        'estado',
-        'prioridad',
-        'fechaLimite',
-        'idCategoria',
-    ]));
-
-    $cambios = [];
-    foreach ($tarea->getChanges() as $campo => $nuevoValor) {
-        if ($campo === 'updated_at') continue;
-        $anterior = $original[$campo] ?? 'N/A';
-        $cambios[] = "$campo: '$anterior' -> '$nuevoValor'";
-    }
-
-    if (count($cambios) > 0) {
-        \Log::info('Registrando cambios en historial para tarea ID: ' . $tarea->idTareas);
-        \Log::info('Cambios: ', $cambios);
-
-        HistorialTarea::create([
-            'idTareas'       => $tarea->idTareas,
-            'idUsuario'      => $request->user()->id,
-            'accion'         => 'actualización',
-            'detalle_cambio' => implode(', ', $cambios),
-            'fechaCambio'    => now(),
+        $request->validate([
+            'titulo'      => 'sometimes|required|string|max:100',
+            'descripcion' => 'nullable|string',
+            'estado'      => 'sometimes|required|string',
+            'prioridad'   => 'sometimes|required|string',
+            'fechaLimite' => 'nullable|date',
+            'idCategoria' => 'nullable|exists:categorias,idCategoria',
         ]);
-    }
 
-    return response()->json($tarea);
-}
+        $original = $tarea->getOriginal();
+
+        $tarea->update($request->only([
+            'titulo',
+            'descripcion',
+            'estado',
+            'prioridad',
+            'fechaLimite',
+            'idCategoria',
+        ]));
+
+        $cambios = [];
+        foreach ($tarea->getChanges() as $campo => $nuevoValor) {
+            if ($campo === 'updated_at') continue;
+            $anterior = $original[$campo] ?? 'N/A';
+            $cambios[] = "$campo: '$anterior' -> '$nuevoValor'";
+        }
+
+        if (count($cambios) > 0) {
+            \Log::info('Registrando cambios en historial para tarea ID: ' . $tarea->idTareas);
+            \Log::info('Cambios: ', $cambios);
+
+            HistorialTarea::create([
+                'idTareas'       => $tarea->idTareas,
+                'idUsuario'      => $request->user()->id,
+                'accion'         => 'actualización',
+                'detalle_cambio' => implode(', ', $cambios),
+                'fechaCambio'    => now(),
+            ]);
+        }
+
+        return response()->json($tarea);
+    }
 
 
     // Mostrar historial de tareas del usuario autenticado
@@ -152,66 +152,65 @@ class TareaController extends Controller
 
     // Eliminar una tarea
     public function destroy(Request $request, $id)
-{
-    $tarea = Tarea::find($id);
-    if (!$tarea) {
-        return response()->json(['message' => 'Tarea no encontrada'], 404);
+    {
+        $tarea = Tarea::find($id);
+        if (!$tarea) {
+            return response()->json(['message' => 'Tarea no encontrada'], 404);
+        }
+
+        if ($request->user()->id !== $tarea->idUsuario) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        \Log::info('Eliminando tarea ID: ' . $tarea->idTareas);
+        \Log::info('Detalles de la tarea: ', [
+            'idTareas'  => $tarea->idTareas,
+            'idUsuario' => $request->user()->id,
+            'titulo'    => $tarea->titulo,
+        ]);
+
+        // Registrar en historial ANTES de eliminar
+        HistorialTarea::create([
+            'idTareas'       => $tarea->idTareas,
+            'idUsuario'      => $request->user()->id,
+            'accion'         => 'eliminación',
+            'detalle_cambio' => "Tarea '{$tarea->titulo}' fue eliminada",
+            'fechaCambio'    => now(),
+        ]);
+
+        $tarea->delete();
+
+        return response()->json(['message' => 'Tarea eliminada']);
     }
 
-    if ($request->user()->id !== $tarea->idUsuario) {
-        return response()->json(['message' => 'No autorizado'], 403);
+    // metodo para actualizar el estado
+    public function actualizarEstado(Request $request, $id)
+    {
+        $tarea = Tarea::find($id);
+        if (!$tarea) {
+            return response()->json(['message' => 'Tarea no encontrada'], 404);
+        }
+
+        if ($request->user()->id !== $tarea->idUsuario) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $request->validate([
+            'estado' => 'required|string',
+        ]);
+
+        $original = $tarea->estado;
+        $tarea->estado = $request->estado;
+        $tarea->save();
+
+        HistorialTarea::create([
+            'idTareas'       => $tarea->idTareas,
+            'idUsuario'      => $request->user()->id,
+            'accion'         => 'actualización',
+            'detalle_cambio' => "Estado: '$original' -> '{$request->estado}'",
+            'fechaCambio'    => now(),
+        ]);
+
+        return response()->json($tarea);
     }
-
-    \Log::info('Eliminando tarea ID: ' . $tarea->idTareas);
-    \Log::info('Detalles de la tarea: ', [
-        'idTareas'  => $tarea->idTareas,
-        'idUsuario' => $request->user()->id,
-        'titulo'    => $tarea->titulo,
-    ]);
-
-    // Registrar en historial ANTES de eliminar
-    HistorialTarea::create([
-        'idTareas'       => $tarea->idTareas,
-        'idUsuario'      => $request->user()->id,
-        'accion'         => 'eliminación',
-        'detalle_cambio' => "Tarea '{$tarea->titulo}' fue eliminada",
-        'fechaCambio'    => now(),
-    ]);
-
-    $tarea->delete();
-
-    return response()->json(['message' => 'Tarea eliminada']);
-}
-
-// metodo para actualizar el estado
-public function actualizarEstado(Request $request, $id)
-{
-    $tarea = Tarea::find($id);
-    if(!$tarea){
-        return response()->json(['message' => 'Tarea no encontrada'], 404);
-    }
-
-    if($request->user()->id !== $tarea->idUsuario){
-        return response()->json(['message' => 'No autorizado'], 403);
-    }
-
-    $request->validate([
-        'estado' => 'required|string',
-    ]);
-
-    $original = $tarea->estado;
-    $tarea->estado = $request->estado;
-    $tarea->save();
-
-    HistorialTarea::create([
-        'idTareas'       =>$tarea->idTareas,
-        'idUsuario'      =>$request->user()->id,
-        'accion'         =>'actualización',
-        'detalle_cambio' =>"Estado: '$original' -> '{$request->estado}'",
-        'fechaCambio'    =>now(),
-    ]);
-
-    return response()->json($tarea);
-}
-
 }

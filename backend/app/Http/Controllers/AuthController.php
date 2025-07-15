@@ -28,28 +28,28 @@ class AuthController extends Controller
     }
 
     // Iniciar sesión y devolver token
-public function login(Request $request)
-{
-    $request->validate([
-        'email'    => 'required|string|email',
-        'password' => 'required|string',
-    ]);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email'    => 'required|string|email',
+            'password' => 'required|string',
+        ]);
 
-    $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Las credenciales son incorrectas.'
+            ], 401); // 401 para error de autenticación
+        }
+
+        $token = $user->createToken('token')->plainTextToken;
+
         return response()->json([
-            'message' => 'Las credenciales son incorrectas.'
-        ], 401); // 401 para error de autenticación
+            'user'  => $user,
+            'token' => $token,
+        ]);
     }
-
-    $token = $user->createToken('token')->plainTextToken;
-
-    return response()->json([
-        'user'  => $user,
-        'token' => $token,
-    ]);
-}
 
 
     // Obtener datos del usuario autenticado

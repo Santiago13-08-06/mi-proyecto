@@ -1,11 +1,19 @@
+/* ===========================================================================
+ * IMPORTACIONES
+ * =========================================================================== */
 import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { TaskService } from '../services/task.service';
 import { AuthService } from '../services/auth.service';
 import { CategoriasService } from '../services/categorias.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { FiltroTareaPipe } from '../pipes/filtro-tarea.pipe';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
@@ -13,11 +21,17 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Router } from '@angular/router';
 
+/* ===========================================================================
+ * VALIDADORES PERSONALIZADOS
+ * =========================================================================== */
+
+/** Valida que un campo no contenga solo espacios en blanco */
 export function noSoloEspaciosValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value || '';
   return value.trim().length === 0 ? { soloEspacios: true } : null;
 }
 
+/** Valida que una fecha no sea anterior a la actual */
 export function fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
   const valor = control.value;
   if (!valor) return null;
@@ -31,15 +45,22 @@ export function fechaNoPasadaValidator(control: AbstractControl): ValidationErro
   return fechaIngresada < hoy ? { fechaPasada: true } : null;
 }
 
+/* ===========================================================================
+ * COMPONENTE DASHBOARD
+ * =========================================================================== */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class DashboardComponent implements OnInit {
+  /* =========================================================================
+   * PROPIEDADES PRINCIPALES DEL COMPONENTE
+   * ========================================================================= */
+
   @ViewChild('tituloInput') tituloInput!: ElementRef<HTMLInputElement>;
   taskForm: FormGroup;
   tareas: any[] = [];
@@ -57,6 +78,9 @@ export class DashboardComponent implements OnInit {
   enProgresoCount: number = 0;
   filtroActual: 'todas' | 'pendientes' | 'completadas' | 'en_progreso' = 'todas';
 
+  /* =========================================================================
+   * CONSTRUCTOR E INYECCIÓN DE DEPENDENCIAS
+   * ========================================================================= */
   constructor(
     private fb: FormBuilder,
     private taskService: TaskService,
@@ -72,10 +96,13 @@ export class DashboardComponent implements OnInit {
       prioridad: ['', Validators.required],
       fechaLimite: ['', [fechaNoPasadaValidator]],
       idCategoria: [''],
-      nuevaCategoria: ['']
+      nuevaCategoria: [''],
     });
   }
 
+  /* =========================================================================
+   * CICLO DE VIDA: ngOnInit
+   * ========================================================================= */
   ngOnInit(): void {
     this.filtroActual = 'todas';
 
@@ -85,17 +112,15 @@ export class DashboardComponent implements OnInit {
         this.usuario = user;
         this.cargarTareas();
       },
-      error: (err) => console.error('No autenticado', err)
+      error: (err) => console.error('No autenticado', err),
     });
 
     this.categoriasService.obtenerCategorias().subscribe({
-      next: (data) => this.categorias = data,
-      error: (err) => console.error('Error cargando categorías', err)
+      next: (data) => (this.categorias = data),
+      error: (err) => console.error('Error cargando categorías', err),
     });
 
-    // Escucha los cambios del select de categoría
     this.taskForm.get('idCategoria')?.valueChanges.subscribe((value) => {
-      // Limpiar el input de nueva categoría cuando se selecciona una existente
       if (value && value !== '') {
         this.nuevaCategoria = '';
         this.errorCategoria = '';
@@ -107,29 +132,34 @@ export class DashboardComponent implements OnInit {
     this.aplicarModoOscuro();
   }
 
+  /* =========================================================================
+   * CARGA DE TAREAS
+   * ========================================================================= */
   cargarTareas(): void {
     this.taskService.getTasks().subscribe({
       next: (res) => {
         this.tareas = res.map((t: any) => ({
           ...t,
-          estado: t.estado?.toLowerCase() || 'pendiente'
+          estado: t.estado?.toLowerCase() || 'pendiente',
         }));
-
-        this.pendientesCount = this.tareas.filter(t => t.estado === 'pendiente').length;
-        this.completadasCount = this.tareas.filter(t => t.estado === 'completada').length;
-        this.enProgresoCount = this.tareas.filter(t => t.estado === 'en_progreso').length;
+        this.actualizarContadores();
       },
-      error: (err) => console.error('Error al cargar tareas:', err)
+      error: (err) => console.error('Error al cargar tareas:', err),
     });
   }
 
+  /* =========================================================================
+   * CRUD DE TAREAS
+   * ========================================================================= */
+
+  /** Agregar o actualizar una tarea */
   addTask(): void {
     if (this.taskForm.invalid) return;
 
     const tareaData = {
       ...this.taskForm.value,
       estado: 'pendiente',
-      idCategoria: this.taskForm.value.idCategoria || null
+      idCategoria: this.taskForm.value.idCategoria || null,
     };
 
     if (this.editando && this.tareaEditandoId !== null) {
@@ -139,7 +169,7 @@ export class DashboardComponent implements OnInit {
           this.resetFormulario();
           this.cargarTareas();
         },
-        error: (err) => console.error('Error al actualizar tarea:', err)
+        error: (err) => console.error('Error al actualizar tarea:', err),
       });
     } else {
       this.taskService.createTask(tareaData).subscribe({
@@ -148,11 +178,12 @@ export class DashboardComponent implements OnInit {
           this.resetFormulario();
           this.cargarTareas();
         },
-        error: (err) => console.error('Error al guardar tarea:', err)
+        error: (err) => console.error('Error al guardar tarea:', err),
       });
     }
   }
 
+  /** Editar tarea existente */
   editarTarea(tarea: any): void {
     this.editando = true;
     this.tareaEditandoId = tarea.idTareas;
@@ -162,12 +193,13 @@ export class DashboardComponent implements OnInit {
       estado: tarea.estado?.toLowerCase(),
       prioridad: tarea.prioridad?.toLowerCase(),
       fechaLimite: tarea.fechaLimite,
-      idCategoria: tarea.idCategoria || ''
+      idCategoria: tarea.idCategoria || '',
     });
 
     setTimeout(() => this.tituloInput.nativeElement.focus());
   }
 
+  /** Eliminar tarea */
   eliminarTarea(id: number): void {
     if (confirm('¿Seguro que quieres eliminar esta tarea?')) {
       this.taskService.deleteTask(id).subscribe({
@@ -175,32 +207,38 @@ export class DashboardComponent implements OnInit {
           this.toastr.error('Tarea eliminada 🗑️');
           this.cargarTareas();
         },
-        error: (err) => console.error('Error al eliminar tarea:', err)
+        error: (err) => console.error('Error al eliminar tarea:', err),
       });
     }
   }
 
+  /** Cambiar estado de tarea */
   cambiarEstado(id: number, nuevoEstado: string) {
-    this.taskService.actualizarEstado(id, nuevoEstado).subscribe(() => {
-      const tarea = this.tareas.find(t => t.id === id || t.idTareas === id);
-      if (tarea) {
-        tarea.estado = nuevoEstado;
-
-        this.pendientesCount = this.tareas.filter(t => t.estado === 'pendiente').length;
-        this.completadasCount = this.tareas.filter(t => t.estado === 'completada').length;
-        this.enProgresoCount = this.tareas.filter(t => t.estado === 'en_progreso').length;
+    this.taskService.actualizarEstado(id, nuevoEstado).subscribe(
+      () => {
+        const tarea = this.tareas.find((t) => t.id === id || t.idTareas === id);
+        if (tarea) {
+          tarea.estado = nuevoEstado;
+          this.actualizarContadores();
+        }
+        this.toastr.success('Estado actualizado correctamente ✅');
+      },
+      () => {
+        this.toastr.error('No se pudo actualizar el estado ❌');
       }
-
-      this.toastr.success('Estado actualizado correctamente ✅');
-    }, () => {
-      this.toastr.error('No se pudo actualizar el estado ❌');
-    });
+    );
   }
 
+  /* =========================================================================
+   * UTILIDADES
+   * ========================================================================= */
+
+  /** Expandir o contraer tarea */
   toggleExpandir(id: number): void {
     this.tareaExpandidaId = this.tareaExpandidaId === id ? null : id;
   }
 
+  /** Reiniciar formulario */
   resetFormulario(): void {
     this.taskForm.reset({
       titulo: '',
@@ -208,7 +246,7 @@ export class DashboardComponent implements OnInit {
       estado: 'pendiente',
       prioridad: '',
       fechaLimite: '',
-      idCategoria: ''
+      idCategoria: '',
     });
     this.editando = false;
     this.tareaEditandoId = null;
@@ -218,18 +256,33 @@ export class DashboardComponent implements OnInit {
     setTimeout(() => this.tituloInput?.nativeElement.focus());
   }
 
+  /** Obtener clase de prioridad */
   getPrioridadClass(prioridad: string): string {
     switch (prioridad.toLowerCase()) {
-      case 'alta': return 'tag-alta';
-      case 'media': return 'tag-media';
-      case 'baja': return 'tag-baja';
-      default: return '';
+      case 'alta':
+        return 'tag-alta';
+      case 'media':
+        return 'tag-media';
+      case 'baja':
+        return 'tag-baja';
+      default:
+        return '';
     }
   }
 
+  /** Actualizar contadores de estados */
+  actualizarContadores(): void {
+    this.pendientesCount = this.tareas.filter((t) => t.estado === 'pendiente').length;
+    this.completadasCount = this.tareas.filter((t) => t.estado === 'completada').length;
+    this.enProgresoCount = this.tareas.filter((t) => t.estado === 'en_progreso').length;
+  }
+
+  /* =========================================================================
+   * EXPORTAR DATOS
+   * ========================================================================= */
   exportarExcel(): void {
     const worksheet = XLSX.utils.json_to_sheet(this.tareas);
-    const workbook = { Sheets: { 'Tareas': worksheet }, SheetNames: ['Tareas'] };
+    const workbook = { Sheets: { Tareas: worksheet }, SheetNames: ['Tareas'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     FileSaver.saveAs(blob, 'tareas.xlsx');
@@ -239,36 +292,42 @@ export class DashboardComponent implements OnInit {
     const doc = new jsPDF();
     autoTable(doc, {
       head: [['Título', 'Descripción', 'Estado', 'Prioridad', 'Fecha Límite']],
-      body: this.tareas.map(t => [
+      body: this.tareas.map((t) => [
         t.titulo,
         t.descripcion || '',
         t.estado,
         t.prioridad,
-        t.fechaLimite ? new Date(t.fechaLimite).toLocaleDateString() : ''
-      ])
+        t.fechaLimite ? new Date(t.fechaLimite).toLocaleDateString() : '',
+      ]),
     });
     doc.save('tareas.pdf');
   }
 
+  /* =========================================================================
+   * SESIÓN
+   * ========================================================================= */
   cerrarSesion(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
     this.toastr.info('Sesión cerrada correctamente 👋');
   }
 
+  /* =========================================================================
+   * FILTROS Y BUSQUEDAS
+   * ========================================================================= */
   getTareasFiltradas(): any[] {
     let tareasFiltradas = [...this.tareas];
 
     if (this.filtroActual === 'pendientes') {
-      tareasFiltradas = tareasFiltradas.filter(t => t.estado === 'pendiente');
+      tareasFiltradas = tareasFiltradas.filter((t) => t.estado === 'pendiente');
     } else if (this.filtroActual === 'completadas') {
-      tareasFiltradas = tareasFiltradas.filter(t => t.estado === 'completada');
+      tareasFiltradas = tareasFiltradas.filter((t) => t.estado === 'completada');
     } else if (this.filtroActual === 'en_progreso') {
-      tareasFiltradas = tareasFiltradas.filter(t => t.estado === 'en_progreso');
+      tareasFiltradas = tareasFiltradas.filter((t) => t.estado === 'en_progreso');
     }
 
     if (this.filtroBusqueda.trim() !== '') {
-      tareasFiltradas = tareasFiltradas.filter(t =>
+      tareasFiltradas = tareasFiltradas.filter((t) =>
         t.titulo.toLowerCase().includes(this.filtroBusqueda.toLowerCase())
       );
     }
@@ -276,6 +335,9 @@ export class DashboardComponent implements OnInit {
     return tareasFiltradas;
   }
 
+  /* =========================================================================
+   * CRUD DE CATEGORÍAS
+   * ========================================================================= */
   crearCategoria(): void {
     const nombre = this.nuevaCategoria?.trim();
     if (!nombre) {
@@ -283,8 +345,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    // Verificar si ya existe una categoría con ese nombre
-    if (this.categorias.some(cat => cat.nombre.toLowerCase() === nombre.toLowerCase())) {
+    if (this.categorias.some((cat) => cat.nombre.toLowerCase() === nombre.toLowerCase())) {
       this.errorCategoria = 'Ya existe una categoría con ese nombre.';
       return;
     }
@@ -300,7 +361,7 @@ export class DashboardComponent implements OnInit {
       error: (err) => {
         console.error('Error al crear categoría', err);
         this.errorCategoria = 'No se pudo crear la categoría.';
-      }
+      },
     });
   }
 
@@ -308,13 +369,13 @@ export class DashboardComponent implements OnInit {
     const id = this.getCategoriaSeleccionadaId();
     if (!id) return;
 
-    const categoria = this.categorias.find(c => c.idCategoria === id);
+    const categoria = this.categorias.find((c) => c.idCategoria === id);
     if (!categoria) return;
 
     if (confirm(`¿Estás seguro de que deseas eliminar la categoría "${categoria.nombre}"?`)) {
       this.categoriasService.eliminarCategoria(id).subscribe({
         next: () => {
-          this.categorias = this.categorias.filter(c => c.idCategoria !== id);
+          this.categorias = this.categorias.filter((c) => c.idCategoria !== id);
           this.taskForm.get('idCategoria')?.setValue('');
           this.nuevaCategoria = '';
           this.errorCategoria = '';
@@ -323,7 +384,7 @@ export class DashboardComponent implements OnInit {
         error: (err) => {
           console.error('Error al eliminar categoría', err);
           this.toastr.error('No se pudo eliminar la categoría ❌');
-        }
+        },
       });
     }
   }
@@ -343,54 +404,50 @@ export class DashboardComponent implements OnInit {
 
   esCategoriaExistenteSeleccionada(): boolean {
     const idSel = this.getCategoriaSeleccionadaId();
-    return (
-      idSel !== null &&
-      this.categorias.some(c => c.idCategoria === idSel)
-    );
+    return idSel !== null && this.categorias.some((c) => c.idCategoria === idSel);
   }
 
   getNombreCategoriaSeleccionada(): string {
     const id = this.getCategoriaSeleccionadaId();
     if (!id) return '';
-    const categoria = this.categorias.find(c => c.idCategoria === id);
+    const categoria = this.categorias.find((c) => c.idCategoria === id);
     return categoria ? categoria.nombre : '';
   }
 
-  // Métodos para mostrar/ocultar el input de nueva categoría
   mostrarInputNuevaCategoria(): boolean {
     return !this.esCategoriaExistenteSeleccionada();
   }
 
+  /* =========================================================================
+   * FILTROS DE VISUALIZACIÓN
+   * ========================================================================= */
   verTodas() {
     this.filtroActual = 'todas';
   }
-
   alternarPendientes() {
     this.filtroActual = this.filtroActual === 'pendientes' ? 'todas' : 'pendientes';
   }
-
   alternarCompletadas() {
     this.filtroActual = this.filtroActual === 'completadas' ? 'todas' : 'completadas';
   }
-
   alternaEnProgreso() {
     this.filtroActual = this.filtroActual === 'en_progreso' ? 'todas' : 'en_progreso';
   }
 
-toggleModoOscuro(): void {
-  this.modoOscuroActivado = !this.modoOscuroActivado;
-  this.aplicarModoOscuro();
-  localStorage.setItem('modoOscuro', String(this.modoOscuroActivado));
-}
+  /* =========================================================================
+   * MODO OSCURO
+   * ========================================================================= */
+  toggleModoOscuro(): void {
+    this.modoOscuroActivado = !this.modoOscuroActivado;
+    this.aplicarModoOscuro();
+    localStorage.setItem('modoOscuro', String(this.modoOscuroActivado));
+  }
 
-aplicarModoOscuro(): void {
-  if (this.modoOscuroActivado) {
-    document.body.classList.add('dark-mode');
-  } else {
-    document.body.classList.remove('dark-mode');
+  aplicarModoOscuro(): void {
+    if (this.modoOscuroActivado) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
   }
 }
-}
-
-
-

@@ -1,19 +1,27 @@
-<!-- login.component.html -->
+<!-- ==========================================
+     Estructura principal
+     ========================================== -->
+
 <div class="login-wrapper">
+  <!-- Contenedor principal: logo + formulario -->
   <div class="login-container">
+    <!-- Sección del logo -->
     <div class="login-logo">
-      <img src="assets/img/logo-login.jpg" alt="Logo Login">
+      <img src="assets/img/logo-login.jpg" alt="Logo de la aplicación" />
     </div>
 
+    <!-- Formulario de inicio de sesión -->
     <div class="login-form">
       <h2>Iniciar Sesión</h2>
 
-      <!-- Bloque de mensaje de error -->
+      <!-- Mensaje de error general -->
       <div *ngIf="errorMsg" class="alert alert-danger">
         {{ errorMsg }}
       </div>
 
+      <!-- Formulario reactivo -->
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Campo: Email -->
         <div>
           <label for="email">Email</label>
           <input type="email" id="email" formControlName="email" />
@@ -23,18 +31,21 @@
           </div>
         </div>
 
+        <!-- Campo: Contraseña -->
         <div>
           <label for="password">Contraseña</label>
           <input type="password" id="password" formControlName="password" />
           <div *ngIf="password.invalid && password.touched">
             <span *ngIf="password.errors?.['required']">Contraseña es requerida</span>
             <span *ngIf="password.errors?.['minlength']">Mínimo 6 caracteres</span>
-            <a routerLink="/register" class="register-link"></a>
           </div>
         </div>
 
+        <!-- Botón: Iniciar sesión -->
         <button type="submit" [disabled]="loginForm.invalid">Iniciar Sesión</button>
-        <button type="button" routerLink="/register">Registrate</button>
+
+        <!-- Botón: Registro -->
+        <button type="button" routerLink="/register">Registrarse</button>
       </form>
     </div>
   </div>

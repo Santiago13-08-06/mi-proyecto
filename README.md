@@ -1,10 +1,6 @@
 \# Mi Proyecto Fullstack
 
-
-
 Este repositorio contiene la estructura de un proyecto \*\*Fullstack\*\* con:
-
-
 
 \- \*\*Backend:\*\* Laravel v12
 
@@ -12,11 +8,7 @@ Este repositorio contiene la estructura de un proyecto \*\*Fullstack\*\* con:
 
 \- \*\*Base de Datos:\*\* PostgreSQL (respaldo `.sql` incluido)
 
-
-
 \## 📂 Estructura
-
-
 
 mi-proyecto/
 
@@ -26,13 +18,7 @@ mi-proyecto/
 
 ├── db/ → Respaldo PostgreSQL
 
-
-
-
-
 \## 🚀 Cómo usar
-
-
 
 \### Backend (Laravel)
 
@@ -60,3 +46,4 @@ ng serve
 
 
 
+```

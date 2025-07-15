@@ -5,8 +5,5 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 bootstrapApplication(AppComponent, {
   ...appConfig,
-  providers: [
-    ...appConfig.providers,
-    provideAnimations() // ← NECESARIO para que ngx-toastr monte dinámicamente los toasts
-  ]
+  providers: [...appConfig.providers, provideAnimations()],
 }).catch((err) => console.error(err));

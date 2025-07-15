@@ -1,0 +1,16 @@
+# Ignora dependencias
+node_modules
+
+# Ignora la carpeta de build de Angular
+dist
+
+# Ignora archivos de salida de cobertura de tests (si usas tests)
+coverage
+
+# Ignora logs y temporales
+*.log
+*.tmp
+
+# Ignora IDE o SO si aplicara
+.DS_Store
+.idea

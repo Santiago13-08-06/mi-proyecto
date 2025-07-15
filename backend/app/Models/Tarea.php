@@ -44,10 +44,10 @@ class Tarea extends Model
     // Accesor para formatear la fechaLimite
     public function getFechaLimiteAttribute($value)
     {
-        return \Carbon\Carbon::parse($value)->format('Y-m-d');  // O el formato que prefieras
+        return \Carbon\Carbon::parse($value)->format('Y-m-d');
     }
 
-    // Cast de campos (por ejemplo, para la fechaLimite)
+    // Cast de campos
     protected $casts = [
         'fechaLimite' => 'date',
     ];

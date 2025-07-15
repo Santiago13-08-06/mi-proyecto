@@ -1,11 +1,15 @@
-/* ==================== BASE ==================== */
+/* ===============================================
+   BASE: Colores, tipografía y fondo principal
+   =============================================== */
 body {
   background-color: #f8f9fa;
   color: #212529;
   font-family: Arial, sans-serif;
 }
 
-/* ==================== CONTENEDOR PRINCIPAL ==================== */
+/* ===============================================
+   CONTENEDOR PRINCIPAL: Tarjeta que envuelve todo el dashboard
+   =============================================== */
 .dashboard-container {
   max-width: 700px;
   margin: 2rem auto;
@@ -15,7 +19,9 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-/* ==================== ENCABEZADO RESPONSIVE ==================== */
+/* ===============================================
+   ENCABEZADO: Controles de sesión y modo oscuro
+   =============================================== */
 .header-controls {
   display: flex;
   justify-content: space-between;
@@ -29,6 +35,7 @@ body {
   text-align: right;
 }
 
+/* ENCABEZADO RESPONSIVE */
 @media (max-width: 600px) {
   .header-controls {
     flex-direction: column;
@@ -42,13 +49,17 @@ body {
   }
 }
 
-/* ==================== TÍTULOS ==================== */
+/* ===============================================
+   TÍTULOS: Estilos para encabezados de sección
+   =============================================== */
 .section-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
-/* ==================== FORMULARIO ==================== */
+/* ===============================================
+   FORMULARIO DE TAREA: Campos de entrada y selectores
+   =============================================== */
 .task-form {
   display: flex;
   flex-direction: column;
@@ -74,11 +85,16 @@ body {
   flex-wrap: wrap;
 }
 
+/* Campo inválido resaltado en rojo */
 input.ng-invalid.ng-touched {
   border: 1px solid red;
 }
 
-/* ==================== BOTONES ==================== */
+/* ===============================================
+   BOTONES: Estilos generales para acciones
+   =============================================== */
+
+/* Botón principal (Agregar/Actualizar tarea) */
 .btn-primary {
   background-color: #28a745;
   color: white;
@@ -93,6 +109,7 @@ input.ng-invalid.ng-touched {
   background-color: #218838;
 }
 
+/* Botón secundario (exportar, editar, etc.) */
 .btn-secondary {
   background: #007bff;
   color: white;
@@ -102,6 +119,7 @@ input.ng-invalid.ng-touched {
   cursor: pointer;
 }
 
+/* Botón tipo enlace */
 .btn-link {
   background: none;
   border: none;
@@ -111,6 +129,7 @@ input.ng-invalid.ng-touched {
   font-weight: 500;
 }
 
+/* Botón de eliminar */
 .btn-danger {
   background-color: #dc3545;
   color: white;
@@ -131,7 +150,9 @@ input.ng-invalid.ng-touched {
   transform: translateY(-1px);
 }
 
-/* ==================== LISTA DE TAREAS ==================== */
+/* ===============================================
+   LISTA DE TAREAS: Contenedor y elementos
+   =============================================== */
 .task-list {
   list-style: none;
   padding: 0;
@@ -185,6 +206,7 @@ input.ng-invalid.ng-touched {
   flex-wrap: wrap;
 }
 
+/* Tarea completada con efecto de opacidad y tachado */
 .task-item.completada {
   opacity: 0.7;
 }
@@ -194,7 +216,9 @@ input.ng-invalid.ng-touched {
   color: #555;
 }
 
-/* ==================== PRIORIDADES ==================== */
+/* ===============================================
+   PRIORIDAD: Colores por prioridad de la tarea
+   =============================================== */
 .tag {
   padding: 0.25rem 0.6rem;
   border-radius: 20px;
@@ -216,7 +240,9 @@ input.ng-invalid.ng-touched {
   background-color: #dc3545;
 }
 
-/* ==================== ESTADOS ==================== */
+/* ===============================================
+   ESTADOS: Pendiente, En Progreso, Completada
+   =============================================== */
 .estado-indicador {
   padding: 4px 10px;
   border-radius: 20px;
@@ -253,7 +279,9 @@ input.ng-invalid.ng-touched {
   border: 1px solid #ccc;
 }
 
-/* ==================== BUSCADOR ==================== */
+/* ===============================================
+   BUSCADOR: Estilos del input y su icono
+   =============================================== */
 .search-container {
   display: flex;
   justify-content: center;
@@ -302,7 +330,9 @@ input.ng-invalid.ng-touched {
   color: #007bff;
 }
 
-/* ==================== RESUMEN TAREAS ==================== */
+/* ===============================================
+   RESUMEN DE TAREAS: Contador interactivo
+   =============================================== */
 .resumen-tareas {
   display: flex;
   gap: 1rem;
@@ -316,7 +346,9 @@ input.ng-invalid.ng-touched {
   }
 }
 
-/* ==================== BOTONES EXPORTAR ==================== */
+/* ===============================================
+   BOTONES DE EXPORTACIÓN
+   =============================================== */
 .export-buttons {
   display: flex;
   gap: 10px;
@@ -333,7 +365,9 @@ input.ng-invalid.ng-touched {
   }
 }
 
-/* ==================== NUEVA CATEGORÍA ==================== */
+/* ===============================================
+   NUEVA CATEGORÍA: Input y botones para crear/eliminar
+   =============================================== */
 .task-category {
   display: block;
   color: #555;
@@ -433,14 +467,18 @@ input.ng-invalid.ng-touched {
   }
 }
 
-/* ==================== ICONO TAREA COMPLETADA ==================== */
+/* ===============================================
+   ICONO TAREA COMPLETADA: Check visual
+   =============================================== */
 .icono-completada {
   color: green;
   margin-left: 6px;
   font-size: 1rem;
 }
 
-/* ==================== CONTADOR ==================== */
+/* ===============================================
+   CONTADORES: Animación hover
+   =============================================== */
 .contador {
   cursor: pointer;
   font-weight: bold;
@@ -454,7 +492,9 @@ input.ng-invalid.ng-touched {
   text-decoration: underline;
 }
 
-/* ==================== ERRORES ==================== */
+/* ===============================================
+   ERRORES: Mensajes de validación
+   =============================================== */
 .error {
   margin-top: 5px;
   margin-bottom: 10px;
@@ -465,7 +505,9 @@ input.ng-invalid.ng-touched {
   font-size: 12px;
 }
 
-/* ==================== ESTILOS DESHABILITADOS ==================== */
+/* ===============================================
+   ESTADOS DESHABILITADOS: Selects y botones inactivos
+   =============================================== */
 button:disabled,
 select:disabled {
   background-color: #cccccc !important;
@@ -474,7 +516,9 @@ select:disabled {
   opacity: 0.7;
 }
 
-/* ==================== MODO OSCURO ==================== */
+/* ===============================================
+   MODO OSCURO: Overrides para tema oscuro
+   =============================================== */
 body.dark-mode {
   background-color: #121212;
   color: #f0f0f0;

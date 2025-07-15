@@ -1,12 +1,16 @@
 <!-- ==================== CONTENEDOR DE ENCABEZADO ==================== -->
 <div class="header-controls">
+  <!-- Botón para alternar modo claro/oscuro -->
   <div class="modo-toggle">
     <button class="btn-secondary" (click)="toggleModoOscuro()">
+      <!-- Ícono dinámico: luna o sol según estado -->
       <i class="fas" [ngClass]="modoOscuroActivado ? 'fa-moon' : 'fa-sun'"></i>
+      <!-- Texto dinámico: etiqueta modo actual -->
       <span class="btn-text">{{ modoOscuroActivado ? 'Dark' : 'Light' }}</span>
     </button>
   </div>
 
+  <!-- Botón de cierre de sesión: limpia sesión y redirige a login -->
   <div class="logout-container">
     <button (click)="cerrarSesion()" class="btn-danger">
       <i class="fas fa-sign-out-alt"></i> Salir
@@ -14,35 +18,57 @@
   </div>
 </div>
 
-<!-- ==================== CONTENEDOR PRINCIPAL ==================== -->
+<!-- ==================== FORMULARIO PRINCIPAL ==================== -->
 <div class="dashboard-container">
   <h2 class="section-title">Agregar nueva tarea</h2>
 
+  <!-- Formulario reactivo: usa FormGroup para validaciones robustas -->
   <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="task-form">
-    <input
-      #tituloInput
-      formControlName="titulo"
-      placeholder="Título"
-      class="input-field"
-    />
-    <div class="error" *ngIf="taskForm.get('titulo')?.invalid && (taskForm.get('titulo')?.touched || taskForm.get('titulo')?.dirty)">
+    <!-- Campo: Título -->
+    <input #tituloInput formControlName="titulo" placeholder="Título" class="input-field" />
+    <!-- Mensajes de validación: combinan validadores requeridos, longitud y personalizado -->
+    <div
+      class="error"
+      *ngIf="
+        taskForm.get('titulo')?.invalid &&
+        (taskForm.get('titulo')?.touched || taskForm.get('titulo')?.dirty)
+      "
+    >
       <small *ngIf="taskForm.get('titulo')?.errors?.['required']">El título es obligatorio.</small>
-      <small *ngIf="taskForm.get('titulo')?.errors?.['minlength']">Debe tener al menos 1 caracter.</small>
-      <small *ngIf="taskForm.get('titulo')?.errors?.['soloEspacios']">No puede ser solo espacios.</small>
+      <small *ngIf="taskForm.get('titulo')?.errors?.['minlength']"
+        >Debe tener al menos 1 caracter.</small
+      >
+      <small *ngIf="taskForm.get('titulo')?.errors?.['soloEspacios']"
+        >No puede ser solo espacios.</small
+      >
     </div>
 
+    <!-- Campo: Descripción -->
     <textarea
       formControlName="descripcion"
       placeholder="Descripción"
       rows="3"
       class="input-field"
     ></textarea>
-    <div class="error" *ngIf="taskForm.get('descripcion')?.invalid && (taskForm.get('descripcion')?.touched || taskForm.get('descripcion')?.dirty)">
-      <small *ngIf="taskForm.get('descripcion')?.errors?.['required']">La descripción es obligatoria.</small>
-      <small *ngIf="taskForm.get('descripcion')?.errors?.['minlength']">Debe tener al menos 3 caracteres.</small>
-      <small *ngIf="taskForm.get('descripcion')?.errors?.['soloEspacios']">No puede ser solo espacios.</small>
+    <div
+      class="error"
+      *ngIf="
+        taskForm.get('descripcion')?.invalid &&
+        (taskForm.get('descripcion')?.touched || taskForm.get('descripcion')?.dirty)
+      "
+    >
+      <small *ngIf="taskForm.get('descripcion')?.errors?.['required']"
+        >La descripción es obligatoria.</small
+      >
+      <small *ngIf="taskForm.get('descripcion')?.errors?.['minlength']"
+        >Debe tener al menos 3 caracteres.</small
+      >
+      <small *ngIf="taskForm.get('descripcion')?.errors?.['soloEspacios']"
+        >No puede ser solo espacios.</small
+      >
     </div>
 
+    <!-- Selector: Prioridad -->
     <div class="select-group">
       <select formControlName="prioridad" class="select-field" required>
         <option value="" disabled hidden>Seleccione prioridad</option>
@@ -51,10 +77,17 @@
         <option value="alta">Alta</option>
       </select>
     </div>
-    <div class="error" *ngIf="taskForm.get('prioridad')?.invalid && (taskForm.get('prioridad')?.touched || taskForm.get('prioridad')?.dirty)">
+    <div
+      class="error"
+      *ngIf="
+        taskForm.get('prioridad')?.invalid &&
+        (taskForm.get('prioridad')?.touched || taskForm.get('prioridad')?.dirty)
+      "
+    >
       <small>Debe seleccionar una prioridad.</small>
     </div>
 
+    <!-- Selector: Categoría existente o crear nueva -->
     <select formControlName="idCategoria" class="select-field">
       <option value="">Sin categoría</option>
       <option *ngFor="let cat of categorias" [value]="cat.idCategoria">
@@ -62,8 +95,9 @@
       </option>
     </select>
 
-    <!-- Nueva categoría -->
+    <!-- Entrada condicional para nueva categoría -->
     <div class="nueva-categoria-wrapper">
+      <!-- Mostrar campo solo si se requiere crear nueva -->
       <input
         type="text"
         *ngIf="mostrarInputNuevaCategoria()"
@@ -73,11 +107,13 @@
         [ngModelOptions]="{ standalone: true }"
       />
 
+      <!-- Mostrar info de categoría seleccionada -->
       <div *ngIf="esCategoriaExistenteSeleccionada()" class="categoria-seleccionada-info">
         <span class="categoria-nombre">{{ getNombreCategoriaSeleccionada() }}</span>
         <small class="categoria-texto">Categoría seleccionada</small>
       </div>
 
+      <!-- Botón dinámico: crear nueva o eliminar seleccionada -->
       <button
         type="button"
         [ngClass]="{
@@ -85,9 +121,11 @@
           'btn-add-categoria': !esCategoriaExistenteSeleccionada()
         }"
         (click)="manejarClickCategoria()"
-        [title]="esCategoriaExistenteSeleccionada() 
-          ? 'Eliminar categoría: ' + getNombreCategoriaSeleccionada() 
-          : 'Crear nueva categoría'"
+        [title]="
+          esCategoriaExistenteSeleccionada()
+            ? 'Eliminar categoría: ' + getNombreCategoriaSeleccionada()
+            : 'Crear nueva categoría'
+        "
       >
         <i [class]="esCategoriaExistenteSeleccionada() ? 'fas fa-minus' : 'fas fa-plus'"></i>
         <span class="btn-text">
@@ -96,21 +134,24 @@
       </button>
     </div>
 
+    <!-- Error de categoría -->
     <div class="error" *ngIf="errorCategoria">
       <small>{{ errorCategoria }}</small>
     </div>
 
+    <!-- Campo: Fecha límite -->
     <input type="date" formControlName="fechaLimite" class="input-field" />
     <div class="error" *ngIf="taskForm.get('fechaLimite')?.errors?.['fechaPasada']">
       <small>La fecha límite no puede estar en el pasado.</small>
     </div>
 
+    <!-- Botón principal: Agregar o actualizar -->
     <button type="submit" class="btn-primary" [disabled]="taskForm.invalid">
       {{ editando ? 'Actualizar tarea' : 'Agregar tarea' }}
     </button>
   </form>
 
-  <!-- Buscador -->
+  <!-- ==================== BUSCADOR DE TAREAS ==================== -->
   <div class="search-container">
     <div class="search-input-wrapper">
       <i class="fas fa-search search-icon"></i>
@@ -123,35 +164,44 @@
     </div>
   </div>
 
-  <!-- Resumen -->
+  <!-- ==================== RESUMEN DE ESTADOS ==================== -->
   <h2 class="section-title">Lista de tareas</h2>
 
   <div class="resumen-tareas">
+    <!-- Cada contador filtra la lista -->
     <p class="contador" (click)="verTodas()">Total: {{ tareas.length }}</p>
-    <p class="contador" style="color: red;" (click)="alternaEnProgreso()">En Progreso: {{ enProgresoCount }}</p>
-    <p class="contador" style="color: blue;" (click)="alternarPendientes()">Pendientes: {{ pendientesCount }}</p>
-    <p class="contador" style="color: green;" (click)="alternarCompletadas()">Completadas: {{ completadasCount }}</p>
-    
+    <p class="contador" style="color: red" (click)="alternaEnProgreso()">
+      En Progreso: {{ enProgresoCount }}
+    </p>
+    <p class="contador" style="color: blue" (click)="alternarPendientes()">
+      Pendientes: {{ pendientesCount }}
+    </p>
+    <p class="contador" style="color: green" (click)="alternarCompletadas()">
+      Completadas: {{ completadasCount }}
+    </p>
   </div>
 
-  <!-- Botones de exportación -->
+  <!-- ==================== EXPORTAR ==================== -->
   <div class="export-buttons">
     <button (click)="exportarExcel()" class="btn-secondary">📊 Exportar Excel</button>
     <button (click)="exportarPDF()" class="btn-secondary">📄 Exportar PDF</button>
   </div>
 
-  <!-- Lista de tareas -->
+  <!-- ==================== LISTADO DE TAREAS ==================== -->
   <ul class="task-list">
+    <!-- Recorre tareas filtradas según buscador y filtros de estado -->
     <li
       *ngFor="let tarea of getTareasFiltradas()"
       class="task-item"
       [ngClass]="tarea.estado === 'completada' ? 'completada' : ''"
     >
       <div class="task-header">
+        <!-- Título -->
         <div class="task-title">
           <strong>{{ tarea.titulo }}</strong>
         </div>
 
+        <!-- Indicadores: prioridad, estado actual -->
         <div class="task-indicators">
           <span class="tag" [ngClass]="getPrioridadClass(tarea.prioridad)">
             {{ tarea.prioridad | titlecase }}
@@ -159,9 +209,13 @@
 
           <span class="estado-indicador" [ngClass]="'estado-' + tarea.estado">
             {{ tarea.estado | titlecase }}
-            <i *ngIf="tarea.estado === 'completada'" class="fas fa-check-circle icono-completada"></i>
+            <i
+              *ngIf="tarea.estado === 'completada'"
+              class="fas fa-check-circle icono-completada"
+            ></i>
           </span>
 
+          <!-- Selector inline para cambiar estado (excepto completadas) -->
           <select
             [ngModel]="tarea.estado"
             (ngModelChange)="cambiarEstado(tarea.idTareas, $event)"
@@ -175,13 +229,21 @@
         </div>
       </div>
 
+      <!-- Fecha límite -->
       <small class="task-date">Fecha límite: {{ tarea.fechaLimite | date }}</small>
+
+      <!-- Categoría -->
       <small class="task-category" *ngIf="tarea.categoria">
         Categoría: <strong>{{ tarea.categoria.nombre }}</strong>
       </small>
 
+      <!-- Acciones por tarea -->
       <div class="task-actions">
-        <button (click)="editarTarea(tarea)" class="btn-secondary" [disabled]="tarea.estado === 'completada'">
+        <button
+          (click)="editarTarea(tarea)"
+          class="btn-secondary"
+          [disabled]="tarea.estado === 'completada'"
+        >
           <i class="fas fa-edit"></i> Editar
         </button>
         <button (click)="eliminarTarea(tarea.idTareas)" class="btn-danger">
@@ -189,12 +251,17 @@
         </button>
       </div>
 
+      <!-- Descripción expandible -->
       <div *ngIf="tareaExpandidaId === tarea.idTareas" class="task-description">
         {{ tarea.descripcion || 'Sin descripción' }}
       </div>
 
+      <!-- Botón para expandir/ocultar -->
       <button (click)="toggleExpandir(tarea.idTareas)" class="btn-link">
-        <i class="fas" [ngClass]="tareaExpandidaId === tarea.idTareas ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        <i
+          class="fas"
+          [ngClass]="tareaExpandidaId === tarea.idTareas ? 'fa-chevron-up' : 'fa-chevron-down'"
+        ></i>
         {{ tareaExpandidaId === tarea.idTareas ? 'Ocultar' : 'Ver más' }}
       </button>
     </li>

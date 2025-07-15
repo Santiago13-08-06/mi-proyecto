@@ -28,16 +28,14 @@ class CategoriaController extends Controller
         return response()->json($categoria, 201);
     }
 
-public function destroy($id, Request $request)
-{
-    $categoria = Categoria::where('idCategoria', $id)
-                          ->where('idUsuario', $request->user()->id)
-                          ->firstOrFail();
+    public function destroy($id, Request $request)
+    {
+        $categoria = Categoria::where('idCategoria', $id)
+            ->where('idUsuario', $request->user()->id)
+            ->firstOrFail();
 
-    $categoria->delete();
+        $categoria->delete();
 
-    return response()->json(['message' => 'Categoría eliminada'], 200);
-}
-
-
+        return response()->json(['message' => 'Categoría eliminada'], 200);
+    }
 }

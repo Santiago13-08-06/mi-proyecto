@@ -1,306 +1,190 @@
-/* Contenedor principal centrado */
+/* =======================================
+   Contenedor principal centrado
+   Pantalla completa con fondo degradado
+   ======================================= */
 .login-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #c9e093, #aceeb5);
-    overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #c9e093, #aceeb5);
+  overflow: hidden;
 }
 
-/* Contenedor que organiza logo + formulario en fila */
-/* Contenedor que organiza logo + formulario en fila */
+/* =======================================
+   Contenedor que agrupa logo y formulario
+   Alineación en fila y separación
+   ======================================= */
 .login-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    padding: 40px;
-    background-color: white; /* ← ahora es blanco */
-    border-radius: 20px;
-    box-shadow: 0 0 25px rgba(0, 255, 0, 0.4);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(0, 255, 0, 0.4);
 }
 
-
-/* Logo con tamaño fijo */
+/* =======================================
+   Logo con tamaño máximo y bordes suaves
+   ======================================= */
 .login-logo img {
-    max-width: 250px;
-    height: auto;
-    border-radius: 10px;
+  max-width: 250px;
+  height: auto;
+  border-radius: 10px;
 }
 
-/* Formulario estilizado */
+/* =======================================
+   Contenedor principal del formulario
+   Borde animado y fondo claro
+   ======================================= */
 .login-form {
-    position: relative;
-    z-index: 2;
-    border: 4px solid;
-    border-image: linear-gradient(90deg, #0e7c47, white, #0e7c47) 1;
-    animation: bordeAnimado 3s linear infinite, brilloAnimado 2s ease-in-out infinite;
-    padding: 30px;
-    border-radius: 15px;
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    background-color: #ffffff;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+  border: 4px solid;
+  border-image: linear-gradient(90deg, #0e7c47, white, #0e7c47) 1;
+  animation: bordeAnimado 3s linear infinite, brilloAnimado 2s ease-in-out infinite;
+  padding: 30px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  background-color: #ffffff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Formulario interno */
+/* =======================================
+   Estructura interna del formulario
+   Campos apilados verticalmente
+   ======================================= */
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Contenedor de cada campo */
-form > div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-/* Etiquetas */
-label {
-    font-weight: bold;
-    font-size: 14px;
-    color: #1a1a1a;
-}
-
-/* Inputs */
-input {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border 0.2s ease-in-out;
-}
-
-input:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-/* Botones generales */
-button {
-    padding: 12px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-}
-
-/* Botón Iniciar Sesión */
-button[type="submit"] {
-    background-color: #007bff;
-    color: white;
-}
-
-button[type="submit"]:hover:not(:disabled) {
-    background-color: #0056b3;
-    transform: scale(1.01);
-}
-
-/* Botón disabled */
-button:disabled {
-    background-color: #999;
-    cursor: not-allowed;
-}
-
-/* Botón Registrarse */
-.login-form button + button {
-    background-color: #28a745;
-    color: white;
-    margin-top: 10px;
-}
-
-.login-form button + button:hover {
-    background-color: #218838;
-    transform: scale(1.01);
-}
-
-/* Mensaje de error */
-.alert.alert-danger {
-    font-size: 14px;
-    color: #dc3545;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    padding: 10px;
-    border-radius: 6px;
-    margin-top: -10px;
-}
-
-/* Animaciones decorativas (manteniendo las tuyas) */
-@keyframes bordeAnimado {
-    0% { border-image-slice: 1; }
-    50% { border-image-slice: 1; }
-    100% { border-image-slice: 1; }
-}
-
-@keyframes brilloAnimado {
-    0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); }
-    50% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.6); }
-}
-
-/* ======================= */
-/* 🌿 CSS LOGIN COMPLETO 🌿 */
-/* ======================= */
-
-/* Contenedor principal centrado */
-.login-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #c9e093, #aceeb5);
-    overflow: hidden;
-}
-
-/* Contenedor logo + formulario */
-.login-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    padding: 40px;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 0 25px rgba(0, 255, 0, 0.4);
-}
-
-/* Logo */
-.login-logo img {
-    max-width: 250px;
-    height: auto;
-    border-radius: 10px;
-}
-
-/* Formulario estilizado */
-.login-form {
-    position: relative;
-    z-index: 2;
-    border: 4px solid;
-    border-image: linear-gradient(90deg, #0e7c47, white, #0e7c47) 1;
-    animation: bordeAnimado 3s linear infinite, brilloAnimado 2s ease-in-out infinite;
-    padding: 30px;
-    border-radius: 15px;
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    background-color: #ffffff;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Form interno */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 form > div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
+/* =======================================
+   Etiquetas de los campos
+   Negritas y legibles
+   ======================================= */
 label {
-    font-weight: bold;
-    font-size: 14px;
-    color: #1a1a1a;
+  font-weight: bold;
+  font-size: 14px;
+  color: #1a1a1a;
 }
 
+/* =======================================
+   Campos de entrada
+   Fondo gris claro, borde definido y transición
+   ======================================= */
 input {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border 0.2s ease-in-out;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border 0.2s ease-in-out;
 }
 
 input:focus {
-    border-color: #007bff;
-    outline: none;
+  border-color: #007bff;
+  outline: none;
 }
 
+/* =======================================
+   Botones generales
+   Estilo base, hover y disabled
+   ======================================= */
 button {
-    padding: 12px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-button[type="submit"] {
-    background-color: #007bff;
-    color: white;
+button[type='submit'] {
+  background-color: #007bff;
+  color: white;
 }
 
-button[type="submit"]:hover:not(:disabled) {
-    background-color: #0056b3;
-    transform: scale(1.01);
+button[type='submit']:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: scale(1.01);
 }
 
 button:disabled {
-    background-color: #999;
-    cursor: not-allowed;
+  background-color: #999;
+  cursor: not-allowed;
 }
 
+/* Botón adicional, por ejemplo, Registrarse */
 .login-form button + button {
-    background-color: #28a745;
-    color: white;
-    margin-top: 10px;
+  background-color: #28a745;
+  color: white;
+  margin-top: 10px;
 }
 
 .login-form button + button:hover {
-    background-color: #218838;
-    transform: scale(1.01);
+  background-color: #218838;
+  transform: scale(1.01);
 }
 
+/* =======================================
+   Mensaje de error
+   Color rojo claro y borde acorde
+   ======================================= */
 .alert.alert-danger {
-    font-size: 14px;
-    color: #dc3545;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    padding: 10px;
-    border-radius: 6px;
-    margin-top: -10px;
+  font-size: 14px;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: -10px;
 }
 
+/* =======================================
+   Animaciones de borde y brillo
+   ======================================= */
 @keyframes bordeAnimado {
-    0% { border-image-slice: 1; }
-    50% { border-image-slice: 1; }
-    100% { border-image-slice: 1; }
+  0%,
+  50%,
+  100% {
+    border-image-slice: 1;
+  }
 }
 
 @keyframes brilloAnimado {
-    0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); }
-    50% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+  }
 }
 
-/* ======================= */
-/* 🌿 MEDIA QUERY RESPONSIVE 🌿 */
-/* ======================= */
-
+/* =======================================
+   Media query: diseño responsivo
+   Organiza contenido en columna
+   ======================================= */
 @media (max-width: 768px) {
   .login-container {
     flex-direction: column;

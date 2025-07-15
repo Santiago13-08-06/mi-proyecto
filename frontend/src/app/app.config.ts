@@ -9,10 +9,7 @@ import { authInterceptor } from './interceptors/auth.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(
-      withFetch(),
-      withInterceptors([authInterceptor])
-    ),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     importProvidersFrom(
       ToastrModule.forRoot({
         positionClass: 'toast-top-center',
@@ -24,6 +21,6 @@ export const appConfig: ApplicationConfig = {
         easeTime: 300,
       }),
       BrowserAnimationsModule
-    )
-  ]
+    ),
+  ],
 };

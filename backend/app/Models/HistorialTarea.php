@@ -9,7 +9,7 @@ class HistorialTarea extends Model
     protected $primaryKey = 'idHistorial';
     public $incrementing = true;
     protected $keyType = 'int';
-    public $timestamps = false;  // Esto está bien si no quieres los timestamps automáticos
+    public $timestamps = false;  
 
     protected $fillable = [
         'idTareas',

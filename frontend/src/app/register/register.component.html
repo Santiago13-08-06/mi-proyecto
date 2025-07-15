@@ -3,21 +3,25 @@
     <h2>Registro de usuario</h2>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
-      <!-- Nombre completo -->
+      <!-- Campo: Nombre completo -->
       <div>
         <label>Nombre completo:</label>
         <input type="text" formControlName="nombreCompleto" />
-        <div class="error" *ngIf="nombreCompleto?.invalid && (nombreCompleto?.touched || nombreCompleto?.dirty)">
+        <div
+          class="error"
+          *ngIf="nombreCompleto?.invalid && (nombreCompleto?.touched || nombreCompleto?.dirty)"
+        >
           <small *ngIf="nombreCompleto?.errors?.['required']">El nombre es obligatorio.</small>
-          <small *ngIf="nombreCompleto?.errors?.['minlength']">Debe tener al menos 3 caracteres.</small>
+          <small *ngIf="nombreCompleto?.errors?.['minlength']"
+            >Debe tener al menos 3 caracteres.</small
+          >
         </div>
         <div class="error" *ngIf="serverErrors['nombreCompleto']">
           <small *ngFor="let err of serverErrors['nombreCompleto']">{{ err }}</small>
         </div>
       </div>
 
-      <!-- Email -->
+      <!-- Campo: Email -->
       <div>
         <label>Email:</label>
         <input type="email" formControlName="email" />
@@ -30,7 +34,7 @@
         </div>
       </div>
 
-      <!-- Contraseña -->
+      <!-- Campo: Contraseña -->
       <div>
         <label>Contraseña:</label>
         <input type="password" formControlName="password" />
@@ -43,14 +47,28 @@
         </div>
       </div>
 
-      <!-- Confirmar contraseña -->
+      <!-- Campo: Confirmar contraseña -->
       <div>
         <label>Confirmar contraseña:</label>
         <input type="password" formControlName="passwordConfirmation" />
-        <div class="error" *ngIf="passwordConfirmation?.invalid && (passwordConfirmation?.touched || passwordConfirmation?.dirty)">
-          <small *ngIf="passwordConfirmation?.errors?.['required']">Debes confirmar la contraseña.</small>
+        <div
+          class="error"
+          *ngIf="
+            passwordConfirmation?.invalid &&
+            (passwordConfirmation?.touched || passwordConfirmation?.dirty)
+          "
+        >
+          <small *ngIf="passwordConfirmation?.errors?.['required']"
+            >Debes confirmar la contraseña.</small
+          >
         </div>
-        <div class="error" *ngIf="registerForm.hasError('mismatch') && (passwordConfirmation?.touched || passwordConfirmation?.dirty)">
+        <div
+          class="error"
+          *ngIf="
+            registerForm.hasError('mismatch') &&
+            (passwordConfirmation?.touched || passwordConfirmation?.dirty)
+          "
+        >
           <small>Las contraseñas no coinciden</small>
         </div>
         <div class="error" *ngIf="serverErrors['password_confirmation']">
@@ -73,7 +91,6 @@
 
       <!-- Botón para ir a login -->
       <button type="button" (click)="goToLogin()">¿Ya tienes cuenta? Inicia sesión</button>
-
     </form>
   </div>
 </div>
