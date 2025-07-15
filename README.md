@@ -87,6 +87,9 @@ ng serve
 ![Registro](./screenshots/Registro.png)
 
 ### Dashboard
+![Registro](./screenshots/Dashboard.png)
+
+### Dashboard Video
 ![Dashboard](./screenshots/Dashboard.mp4)
 
 ---
