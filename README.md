@@ -106,5 +106,13 @@ ng serve
 
 Desarrollado por Santiago Tovar — Ingeniero de Software en formación, entusiasta de soluciones prácticas y arquitectura limpia.
 
+---
+
+☎️ Contacto
+
+Linkdin: www.linkedin.com/in/santiago-tovar-vargas-576317240
+Correo: santiagotovarvargas4@gmail.com
+
+
 
 
