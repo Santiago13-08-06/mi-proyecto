@@ -1,17 +1,20 @@
-<div class="modo-toggle" style="text-align: right; margin-bottom: 1rem;">
-  <button class="btn-secondary" (click)="toggleModoOscuro()">
-    <i class="fas" [ngClass]="modoOscuroActivado ? 'fa-moon' : 'fa-sun'"></i>
-    <span class="btn-text">{{ modoOscuroActivado ? 'Dark' : 'Light' }}</span>
-  </button>
+<!-- ==================== CONTENEDOR DE ENCABEZADO ==================== -->
+<div class="header-controls">
+  <div class="modo-toggle">
+    <button class="btn-secondary" (click)="toggleModoOscuro()">
+      <i class="fas" [ngClass]="modoOscuroActivado ? 'fa-moon' : 'fa-sun'"></i>
+      <span class="btn-text">{{ modoOscuroActivado ? 'Dark' : 'Light' }}</span>
+    </button>
+  </div>
+
+  <div class="logout-container">
+    <button (click)="cerrarSesion()" class="btn-danger">
+      <i class="fas fa-sign-out-alt"></i> Salir
+    </button>
+  </div>
 </div>
 
-
-<div class="logout-container">
-  <button (click)="cerrarSesion()" class="btn-danger">
-    <i class="fas fa-sign-out-alt"></i> Salir
-  </button>
-</div>
-
+<!-- ==================== CONTENEDOR PRINCIPAL ==================== -->
 <div class="dashboard-container">
   <h2 class="section-title">Agregar nueva tarea</h2>
 
@@ -125,9 +128,10 @@
 
   <div class="resumen-tareas">
     <p class="contador" (click)="verTodas()">Total: {{ tareas.length }}</p>
+    <p class="contador" style="color: red;" (click)="alternaEnProgreso()">En Progreso: {{ enProgresoCount }}</p>
     <p class="contador" style="color: blue;" (click)="alternarPendientes()">Pendientes: {{ pendientesCount }}</p>
     <p class="contador" style="color: green;" (click)="alternarCompletadas()">Completadas: {{ completadasCount }}</p>
-    <p class="contador" style="color: red;" (click)="alternaEnProgreso()">En Progreso: {{ enProgresoCount }}</p>
+    
   </div>
 
   <!-- Botones de exportación -->

@@ -1,11 +1,11 @@
-/* ==================== Estilos base ==================== */
+/* ==================== BASE ==================== */
 body {
   background-color: #f8f9fa;
   color: #212529;
   font-family: Arial, sans-serif;
 }
 
-/* ==================== Contenedor principal ==================== */
+/* ==================== CONTENEDOR PRINCIPAL ==================== */
 .dashboard-container {
   max-width: 700px;
   margin: 2rem auto;
@@ -15,13 +15,40 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-/* ==================== Títulos ==================== */
+/* ==================== ENCABEZADO RESPONSIVE ==================== */
+.header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.modo-toggle {
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .header-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modo-toggle,
+  .logout-container {
+    width: 100%;
+    text-align: right;
+  }
+}
+
+/* ==================== TÍTULOS ==================== */
 .section-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
-/* ==================== Formulario ==================== */
+/* ==================== FORMULARIO ==================== */
 .task-form {
   display: flex;
   flex-direction: column;
@@ -41,19 +68,17 @@ body {
   color: #000;
 }
 
-/* Grupo de selects */
 .select-group {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* Validaciones */
 input.ng-invalid.ng-touched {
   border: 1px solid red;
 }
 
-/* ==================== Botones ==================== */
+/* ==================== BOTONES ==================== */
 .btn-primary {
   background-color: #28a745;
   color: white;
@@ -106,7 +131,7 @@ input.ng-invalid.ng-touched {
   transform: translateY(-1px);
 }
 
-/* ==================== Lista de tareas ==================== */
+/* ==================== LISTA DE TAREAS ==================== */
 .task-list {
   list-style: none;
   padding: 0;
@@ -169,7 +194,7 @@ input.ng-invalid.ng-touched {
   color: #555;
 }
 
-/* ==================== Prioridades ==================== */
+/* ==================== PRIORIDADES ==================== */
 .tag {
   padding: 0.25rem 0.6rem;
   border-radius: 20px;
@@ -178,11 +203,20 @@ input.ng-invalid.ng-touched {
   color: white;
 }
 
-.tag-baja { background-color: #6c757d; }
-.tag-media { background-color: #ffc107; color: #212529; }
-.tag-alta { background-color: #dc3545; }
+.tag-baja {
+  background-color: #6c757d;
+}
 
-/* ==================== Estados ==================== */
+.tag-media {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.tag-alta {
+  background-color: #dc3545;
+}
+
+/* ==================== ESTADOS ==================== */
 .estado-indicador {
   padding: 4px 10px;
   border-radius: 20px;
@@ -219,7 +253,7 @@ input.ng-invalid.ng-touched {
   border: 1px solid #ccc;
 }
 
-/* ==================== Búsqueda ==================== */
+/* ==================== BUSCADOR ==================== */
 .search-container {
   display: flex;
   justify-content: center;
@@ -268,7 +302,7 @@ input.ng-invalid.ng-touched {
   color: #007bff;
 }
 
-/* ==================== Contador de resumen ==================== */
+/* ==================== RESUMEN TAREAS ==================== */
 .resumen-tareas {
   display: flex;
   gap: 1rem;
@@ -276,7 +310,30 @@ input.ng-invalid.ng-touched {
   font-weight: bold;
 }
 
-/* ==================== Categorías ==================== */
+@media (max-width: 500px) {
+  .resumen-tareas {
+    flex-wrap: wrap;
+  }
+}
+
+/* ==================== BOTONES EXPORTAR ==================== */
+.export-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 500px) {
+  .export-buttons {
+    flex-direction: column;
+  }
+
+  .export-buttons button {
+    width: 100%;
+  }
+}
+
+/* ==================== NUEVA CATEGORÍA ==================== */
 .task-category {
   display: block;
   color: #555;
@@ -360,67 +417,6 @@ input.ng-invalid.ng-touched {
   transform: scale(1.1);
 }
 
-/* ==================== Toasts ==================== */
-.toast-success {
-  background-color: #198754 !important;
-  color: white;
-  font-weight: 500;
-  border-radius: 8px;
-}
-
-.toast-error {
-  background-color: #dc3545 !important;
-  color: white;
-  font-weight: 500;
-  border-radius: 8px;
-}
-
-.toast-top-center {
-  top: 20px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-}
-
-/* ==================== Iconos ==================== */
-.icono-completada {
-  color: green;
-  margin-left: 6px;
-  font-size: 1rem;
-}
-
-/* ==================== Errores ==================== */
-.error {
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-
-.error small {
-  color: #dc3545;
-  font-size: 12px;
-}
-
-/* ==================== Estilos deshabilitados ==================== */
-button:disabled,
-select:disabled {
-  background-color: #cccccc !important;
-  color: #666666 !important;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-/* ==================== Responsive ==================== */
-@media (max-width: 600px) {
-  .task-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .task-indicators {
-    align-self: flex-end;
-  }
-}
-
 @media (max-width: 576px) {
   .nueva-categoria-wrapper {
     flex-direction: column;
@@ -437,64 +433,14 @@ select:disabled {
   }
 }
 
-body.dark-mode {
-  background-color: #121212;
-  color: #f0f0f0;
+/* ==================== ICONO TAREA COMPLETADA ==================== */
+.icono-completada {
+  color: green;
+  margin-left: 6px;
+  font-size: 1rem;
 }
 
-/* Estilo de los contenedores principales */
-body.dark-mode .dashboard-container {
-  background-color: #1e1e1e;
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
-}
-
-/* Campos de entrada */
-body.dark-mode .input-field,
-body.dark-mode .select-field,
-body.dark-mode .search-input {
-  background-color: #333;
-  color: #fff;
-  border-color: #555;
-}
-
-/* Tarjetas de tarea */
-body.dark-mode .task-item {
-  background-color: #2a2a2a;
-  border-color: #444;
-}
-
-/* Indicadores */
-body.dark-mode .estado-indicador,
-body.dark-mode .tag {
-  opacity: 0.9;
-}
-
-/* Botones */
-body.dark-mode .btn-primary,
-body.dark-mode .btn-secondary,
-body.dark-mode .btn-danger {
-  opacity: 0.95;
-}
-
-/* Cambia color de íconos si deseas */
-body.dark-mode .search-icon {
-  color: #ccc;
-}
-
-/* Título de la tarea en modo oscuro */
-body.dark-mode .task-title {
-  color: #ffffff;
-}
-
-/* Fecha límite en modo oscuro */
-body.dark-mode .task-date {
-  color: #cccccc;
-}
-
-body.dark-mode .task-description {
-  color: #dddddd;
-}
-
+/* ==================== CONTADOR ==================== */
 .contador {
   cursor: pointer;
   font-weight: bold;
@@ -506,4 +452,75 @@ body.dark-mode .task-description {
 .contador:hover {
   transform: scale(1.05);
   text-decoration: underline;
+}
+
+/* ==================== ERRORES ==================== */
+.error {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.error small {
+  color: #dc3545;
+  font-size: 12px;
+}
+
+/* ==================== ESTILOS DESHABILITADOS ==================== */
+button:disabled,
+select:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ==================== MODO OSCURO ==================== */
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark-mode .dashboard-container {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .input-field,
+body.dark-mode .select-field,
+body.dark-mode .search-input {
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+body.dark-mode .task-item {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .estado-indicador,
+body.dark-mode .tag {
+  opacity: 0.9;
+}
+
+body.dark-mode .btn-primary,
+body.dark-mode .btn-secondary,
+body.dark-mode .btn-danger {
+  opacity: 0.95;
+}
+
+body.dark-mode .search-icon {
+  color: #ccc;
+}
+
+body.dark-mode .task-title {
+  color: #ffffff;
+}
+
+body.dark-mode .task-date {
+  color: #cccccc;
+}
+
+body.dark-mode .task-description {
+  color: #dddddd;
 }
