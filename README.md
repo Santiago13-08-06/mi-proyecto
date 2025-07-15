@@ -78,6 +78,19 @@ ng serve
 
 ---
 
+## Capturas de pantalla
+
+### Pantalla de Login
+![Login](./screenshots/Login.png)
+
+### Pantalla de Registro
+![Registro](./screenshots/Registro.png)
+
+### Dashboard
+![Dashboard](./screenshots/Dashboard.mp4)
+
+---
+
 📌 Notas adicionales
 
 . Este frontend está diseñado para trabajar con un API REST Laravel configurado con Sanctum/JWT.
