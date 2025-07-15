@@ -1,4 +1,4 @@
-# 📌 Gestor de Tareas con Autenticación (Angular + Laravel)
+# 📌 Task Manager (Angular + Laravel)
 
 Este proyecto es una aplicación web **full-stack** para la gestión de tareas personales. Permite a los usuarios **registrarse, iniciar sesión**, crear, actualizar, filtrar y eliminar tareas, además de gestionar categorías para organizarlas de forma flexible.
 
